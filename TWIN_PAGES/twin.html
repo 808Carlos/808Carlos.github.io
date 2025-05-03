@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampeR SetaS</title>
+  <style>
+    body {
+      background-image: url(imgs/coffee-beans.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: monospace;
+    }
+
+    .menu {
+      background-color: #ecc082;
+      width: 450px;
+      height: 650px;
+      margin: 50px auto;
+      padding: 35px;
+      text-align: center;
+      max-width: 55% /* con esto conseguí que se redujera de manera reactiva como el ejemplo de Alberto*/
+    }
+
+    h1 {
+      font-weight: bold;
+      font-size: 40px;
+      margin-top: 1px;
+    }
+
+    .subtitulo {
+      font-style: italic;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      margin-top: 3%;
+    }
+
+    hr {
+      border-color: #bd2012;
+      height: 2px;
+      background-color: #962015;
+      margin: 10px;
+      width: 100%;
+    }
+
+    .hr2 {
+      border-color: #bd2012;
+      height: 2px;
+      background-color: #962015;
+      width: 100%;
+      margin: 4.5%;
+      margin-left: 0%;
+    }
+
+    .seccion {
+      font-weight: 785;
+      font-size: 28px;
+      margin: 18px;
+    }
+
+    .producto {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px;
+      font-size: 16px;
+      font-family:Arial, Helvetica, sans-serif
+    }
+
+    .icono img {
+      width: 50px;
+      height: 45px;
+      margin: 10px auto;
+    }
+
+    .icono2 img {
+      width: 40px;
+      height: 35px;
+      margin: 10px auto;
+    }
+
+    .pie {
+      font-size: 10px;
+      margin-bottom: 20px;
+      color: #e4b61f;
+    }
+
+    a:hover {
+      color: red;
+    }
+
+    a:active {
+      color: white;
+    }
+
+    a:visited {
+      color: black; /* no me funciona ni usando un enlace real*/
+    }
+
+    .direccion {
+      font-size: 12px;
+      margin-top: 5px;
+      color: #000000;
+      font-family:Arial, Helvetica, sans-serif
+    }
+  </style>
+</head>
+<body>
+  <div class="menu">
+    <h1>CampeR SetaS</h1>
+    <div class="subtitulo">Nop. 2023</div>
+    <hr>
+
+    <div class="seccion">Setas</div>
+    <div class="icono"><img src="/imgs/1.png" alt="Icono Café"></div>
+    <div class="producto">Boletus Vanilla  
+      <span>3.00</span>
+    </div>
+    <div class="producto">Boletus 2 
+      <span>3.75</span>
+    </div>
+    <div class="producto">Boletus Spice 
+      <span>3.50</span>
+    </div>
+    <div class="producto">Boletus 3 
+      <span>4.00</span>
+    </div>
+    <div class="producto">Boletus x 
+      <span>4.50</span>
+    </div>
+
+    <div class="seccion">Postres</div>
+    <div class="icono2"><img src="/imgs/2.png" alt="Icono Tarta"></div>
+    <div class="producto">Donut de Boletus  
+      <span>1.50</span>
+    </div>
+    <div class="producto">Boletus Pie 
+      <span>2.75</span>
+    </div>
+    <div class="producto">Boletus solo 
+      <span>3.00</span>
+    </div>
+    <div class="producto">Boletus Roll 
+      <span>2.50</span>
+    </div>
+    <hr class="hr2">
+
+    <div><a class="pie" href="https://CastañaPilonga.com" target="blank">Visit our website</a></div>
+    <div class="direccion">123 La Seta Dos</div>
+  </div>
+</body>
+</html>
