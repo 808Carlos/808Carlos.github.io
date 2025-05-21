@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Escondite Inglés</title>
+    <style>
+        body {
+            background-image: url('imgs/fondo.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 50px;
+            color: rgba(255, 255, 255, 0.966);
+            margin-top: 20px;
+        }
+
+        canvas {
+            background: #f0f0f0;
+            border: 2px solid #000;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .acciones {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 18px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background-color: #ff0000ab;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #ff0000;
+            transform: scale(1.05);
+        }
+
+        .acciones div {
+            margin-top: 10px;
+        }
+
+        .reiniciar {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ESCONDITE INGLÉS</h1>
+
+    <canvas id="gameCanvas" width="800" height="300"></canvas>
+
+    <div class="acciones">
+        <div>
+            <strong>JUGADOR 1:</strong>
+            <button onclick="elegirAccion(0, 'andar')">Andar</button>
+            <button onclick="elegirAccion(0, 'pararse')">Pararse</button>
+        </div>
+        <div>
+            <strong>JUGADOR 2:</strong>
+            <button onclick="elegirAccion(1, 'andar')">Andar</button>
+            <button onclick="elegirAccion(1, 'pararse')">Pararse</button>
+        </div>
+        <div>
+            <strong>JUGADOR 3:</strong>
+            <button onclick="elegirAccion(2, 'andar')">Andar</button>
+            <button onclick="elegirAccion(2, 'pararse')">Pararse</button>
+        </div>
+    </div>
+
+    <div class="reiniciar">
+        <button onclick="reiniciarJuego()">Reiniciar Juego</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const filas = 3;
+        const columnas = 10;
+        const anchoCasilla = canvas.width / columnas;
+        const altoCasilla = canvas.height / filas;
+
+        const personajes = [
+            { color: 'black', casilla: 0, fila: 0, corazon: false, accion: null },
+            { color: 'red',   casilla: 0, fila: 1, corazon: false, accion: null },
+            { color: 'white', casilla: 0, fila: 2, corazon: false, accion: null }
+        ];
+
+        let dadosNegrosSalidos = [];
+        let bolsa = ["Negro1", "Negro2", "Negro3", "Rojo"];
+        let accionesPendientes = 3;
+
+        function pintarTablero() {
+            for (let fila = 0; fila < filas; fila++) {
+                for (let col = 0; col < columnas; col++) {
+                    ctx.strokeStyle = '#ccc';
+                    ctx.strokeRect(col * anchoCasilla, fila * altoCasilla, anchoCasilla, altoCasilla);
+                }
+            }
+        }
+
+        function pintarPersonajes() {
+            for (const p of personajes) {
+                const x = p.casilla * anchoCasilla + anchoCasilla / 2;
+                const y = p.fila * altoCasilla + altoCasilla / 2;
+
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(x, y, 10, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.color === 'white') {
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                if (p.corazon) {
+                    ctx.strokeStyle = 'pink';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function bucleJuego() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pintarTablero();
+            pintarPersonajes();
+            requestAnimationFrame(bucleJuego);
+        }
+
+        bucleJuego();
+
+        function tirarDado(tipo) {
+            let resultado = 0;
+            let num = Math.random();
+            if (tipo === "Negro1") resultado = num < 0.66 ? 1 : 2;
+            else if (tipo === "Negro2") resultado = num < 0.66 ? 1 : 0;
+            else if (tipo === "Negro3") resultado = num < 0.33 ? 1 : 0;
+            else if (tipo === "Rojo")   resultado = num < 0.83 ? 1 : 0;
+            return resultado;
+        }
+
+        function elegirAccion(index, accion) {
+            personajes[index].accion = accion;
+            accionesPendientes--;
+            if (accionesPendientes === 0) {
+                realizarTurno();
+                accionesPendientes = 3;
+            }
+        }
+
+        function sacarDadoDeBolsa() {
+            if (bolsa.length === 0) {
+                bolsa = ["Negro1", "Negro2", "Negro3", "Rojo"];
+            }
+            const idx = Math.floor(Math.random() * bolsa.length);
+            return bolsa.splice(idx, 1)[0];
+        }
+
+        function realizarTurno() {
+            const dadoSacado = sacarDadoDeBolsa();
+            alert("Se ha sacado un dado: " + dadoSacado);
+
+            personajes.forEach((p) => {
+                const accion = p.accion;
+                const tieneCorazon = p.corazon;
+
+                if (accion === "pararse") {
+                    if (dadoSacado === "Rojo" && !tieneCorazon) {
+                        p.corazon = true;
+                    }
+                } else if (accion === "andar") {
+                    if (dadoSacado.startsWith("Negro")) {
+                        dadosNegrosSalidos.push(dadoSacado);
+                        let avance = dadosNegrosSalidos.reduce((sum, d) => sum + tirarDado(d), 0);
+                        alert(`${p.color} avanza ${avance} casillas.`);
+                        p.casilla = Math.min(columnas - 1, p.casilla + avance);
+                    } else if (dadoSacado === "Rojo") {
+                        if (tieneCorazon) {
+                            p.corazon = false;
+                        } else {
+                            let retroceso = [...dadosNegrosSalidos, "Rojo"].reduce((sum, d) => sum + tirarDado(d), 0);
+                            alert(`${p.color} retrocede ${retroceso} casillas.`);
+                            p.casilla = Math.max(0, p.casilla - retroceso);
+                        }
+                    }
+                }
+
+                p.accion = null;
+            });
+
+            if (dadosNegrosSalidos.length >= 3 || dadoSacado === "Rojo") {
+                bolsa = ["Negro1", "Negro2", "Negro3", "Rojo"];
+                dadosNegrosSalidos = [];
+            }
+
+            verificarGanador();
+        }
+
+        function verificarGanador() {
+            const ganadores = personajes.filter(p => p.casilla >= columnas - 1);
+            if (ganadores.length > 0) {
+                const nombres = ganadores.map(p => p.color).join(", ");
+                alert(`¡Enhorabuena de la buena! Ganador${ganadores.length > 1 ? 'es' : ''}: ${nombres}`);
+            }
+        }
+
+        function reiniciarJuego() {
+            personajes.forEach(p => {
+                p.casilla = 0;
+                p.corazon = false;
+                p.accion = null;
+            });
+            bolsa = ["Negro1", "Negro2", "Negro3", "Rojo"];
+            dadosNegrosSalidos = [];
+            accionesPendientes = 3;
+            alert("¡Juego reiniciado!");
+        }
+    </script>
+</body>
+</html>
